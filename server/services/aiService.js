@@ -1,14 +1,9 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleGenAI } = require('@google/genai');
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const analyzeStartup = async (idea) => {
   try {
-    const model = genAI.getGenerativeModel({ 
-      model: 'gemini-1.5-flash-latest',
-      generationConfig: { responseMimeType: "application/json" }
-    });
-
     const prompt = `You are an expert startup analyst and venture capital advisor. Analyze the following startup idea and provide a comprehensive evaluation report.
 
 STARTUP IDEA:
@@ -51,15 +46,19 @@ IMPORTANT:
 - Be realistic but constructive
 - Return ONLY valid JSON, no additional text`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let text = response.text();
-    
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+      config: { responseMimeType: 'application/json' }
+    });
+
+    let text = response.text;
+
     // Clean up the response - remove any markdown formatting
     text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    
+
     const analysis = JSON.parse(text);
-    
+
     // Validate and clamp the score
     if (typeof analysis.startupScore !== 'number' || analysis.startupScore < 1 || analysis.startupScore > 10) {
       analysis.startupScore = 5;
