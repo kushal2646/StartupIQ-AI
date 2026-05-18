@@ -4,8 +4,11 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const analyzeStartup = async (idea) => {
   try {
-    // gemini-pro is universally available on v1beta for all free API keys
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    // Using the standard Gemini 1.5 Flash model which is recommended
+    const model = genAI.getGenerativeModel({ 
+      model: 'gemini-1.5-flash',
+      generationConfig: { responseMimeType: "application/json" }
+    });
 
     const prompt = `You are an expert startup analyst and venture capital advisor. Analyze the following startup idea and provide a comprehensive evaluation report.
 
