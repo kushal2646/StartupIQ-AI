@@ -13,7 +13,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000', process.env.FRONTEND_URL],
+  origin: ['http://localhost:5173', 'http://localhost:3000', process.env.FRONTEND_URL, 'https://startup-iq-ai.vercel.app'],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
