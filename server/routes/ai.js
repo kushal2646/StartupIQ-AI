@@ -59,7 +59,7 @@ router.post('/analyze/:id', async (req, res) => {
     console.error('AI Analysis Route Error:', error);
     res.status(500).json({
       success: false,
-      message: 'AI analysis failed. Please try again.',
+      message: error.message || 'AI analysis failed. Please try again.',
       error: error.message
     });
   }
