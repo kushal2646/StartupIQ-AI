@@ -30,6 +30,23 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'StartupIQ AI Server is running 🚀' });
 });
 
+// AI Key diagnostic test (remove after debugging)
+app.get('/api/test-ai', async (req, res) => {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) return res.json({ status: 'ERROR', message: 'GEMINI_API_KEY is NOT set on this server!' });
+  try {
+    const { GoogleGenAI } = require('@google/genai');
+    const ai = new GoogleGenAI({ apiKey: key });
+    const response = await ai.models.generateContent({
+      model: 'gemini-1.5-pro',
+      contents: 'Say hello in one word.',
+    });
+    res.json({ status: 'OK', message: 'Gemini API works!', reply: response.text(), keyPrefix: key.slice(0, 10) + '...' });
+  } catch (err) {
+    res.json({ status: 'ERROR', message: err.message, keyPrefix: key.slice(0, 10) + '...' });
+  }
+});
+
 // Root route
 app.get('/', (req, res) => {
   res.send('StartupIQ AI API is running 🚀');
