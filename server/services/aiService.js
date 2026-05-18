@@ -52,10 +52,13 @@ IMPORTANT:
       config: { responseMimeType: 'application/json' }
     });
 
-    let text = response.text;
+    let text = response.text();
 
     // Clean up the response - remove any markdown formatting
     text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+    // If empty, throw descriptive error
+    if (!text) throw new Error('Empty response from AI model');
 
     const analysis = JSON.parse(text);
 
