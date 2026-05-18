@@ -47,9 +47,8 @@ IMPORTANT:
 - Return ONLY valid JSON, no additional text`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-pro',
       contents: prompt,
-      config: { responseMimeType: 'application/json' }
     });
 
     let text = response.text();
